@@ -1,0 +1,75 @@
+Information
+ø=17˚ with the horizontal
+	vix=cos(17)*vi
+	viy=sin(17)*vi
+
+(taking bottom of ball as reference)
+initial_height = 0.21m
+middle_height = 0.24m
+final_height = 0.12m
+
+// Equations
+delta_y = init_speed_y * delta_time + 1/2 * gravity * delta_time ^ 2
+	init_speed_y = (delta_y/delta_time)-(gravity*delta_t)/2)
+delta_x = init_speed_x * delta_time
+
+// Calculations
+init_speed_y = (delta_y/delta_time)-(gravity*delta_t)/2)
+viy/tan(theta)=vix
+viy/sin(17)=vi
+delta_x = init_speed_x * delta_time
+	delta_y = -0.21m
+	0.62 power
+		time = 0.436s
+		vix = 5.42m/s
+		viy = 1.66m/s
+		delta_x = 2.36m
+	0.69 power
+		time = 0.487s
+		vix = 6.41m/s
+		viy = 1.96m/s
+		delta_x = 3.125m
+
+// Considering the Relationship between Power and Speed as Linear
+// power(x) -> speed_y(y)
+m = delta_y/delta_x
+m = 4.29
+b = y - mx = 1
+speed_y = 4.29x - 1
+
+dy = vy*t - 4.9*t^2
+0 = vy*t - 4.9*t^2 - dy
+t = (-vy + sqrt(vy*vy - 4(-4.9)(-dy)) / 2(-4.9)
+dx = t*(vy/tan(theta))
+
+dy = (4.29(p)-1)t - 4.9*t^2
+dy = vy*dx*tan(theta)/vy - 4.9 * (dx*tan(theta)/vy)^2
+dy = (vy*dx*tan(theta))/vy - 4.9 * (dx*tan(theta)/vy)^2
+
+
+
+vx = vy/tan(theta)
+dx = vx*t
+	t = dx/vx
+	t = dx*tan(theta)/vy
+
+// Calculating x_distance
+theta = 17deg = 0.3rad
+
+dist_x = delta_time * speed_x
+speed_y = 5.4(x)-0.65
+speed_x = 17.7(power)-2.15
+speed_x = speed_y/tan(0.3rad)
+
+dist_x = power * (speed_y/tan(0.3rad)) 
+dist_x = power * ((m(power)+b)/tan(theta))
+dist_x = power * ((17.7(speed_y)-2.15)/tan(0.3rad))
+
+// Inverse (power in function of desired distance)
+dist_x = power * ((m(power)+b)/tan(theta))
+
+
+
+// TODO: Find out minimum distance from barrier to shooter over it
+
+
