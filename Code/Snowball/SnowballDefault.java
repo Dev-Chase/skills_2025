@@ -13,8 +13,8 @@ public class SnowballDefault extends LinearOpMode {
     // DriveTrain
     private DcMotor leftMotor;
     private DcMotor rightMotor;
-    private static final double LEFT_SPEED_COEFFICIENT = 1.0;
-    private static final double RIGHT_SPEED_COEFFICIENT = 1.0;
+    private static final double LEFT_SPEED = 1.0;
+    private static final double RIGHT_SPEED = 1.0;
     private static final double TURN_COEFFICIENT = 0.7;
     private static final double SPIN_COEFFICIENT = 0.5;
     private double drive_power;
@@ -71,13 +71,13 @@ public class SnowballDefault extends LinearOpMode {
     private double distanceFromPower(double power) {
         double vy = POWER_SPEED_SLOPE*power + PROJ_RELATION_INIT_VAL;
         double vx = vy / Math.tan(PROJ_THETA);
-        double time = (vy + Math.sqrt((vy*vy) + 2*ABS_GRAVITY*SHOOTER_HEIGHT)) / ABS_GRAVITY;
+        double time = (vy + Math.sqrt((vy * vy) + 2 * ABS_GRAVITY * SHOOTER_HEIGHT)) / ABS_GRAVITY;
         return vx * time;
     }
 
     private void driveMotors(double left_power, double right_power) {
-        leftMotor.setPower(-left_power * LEFT_SPEED_COEFFICIENT); // Reverse direction
-        rightMotor.setPower(right_power * RIGHT_SPEED_COEFFICIENT);
+        leftMotor.setPower(-left_power * LEFT_SPEED); // Reverse direction
+        rightMotor.setPower(right_power * RIGHT_SPEED);
     }
 
     // Input Trackers
@@ -184,7 +184,7 @@ public class SnowballDefault extends LinearOpMode {
                 if (right_trigger && !last_right_trigger) {
                     shooter_enabled = !shooter_enabled;
                     shooter_accel_time.reset();
-                    shooter_power = SHOOTER_OFF_POWER;
+                    shooter_power = SHOOTER_MIN_POWER;
                     if (!shooter_enabled) {
                         shooterArmed = false;
                     }
