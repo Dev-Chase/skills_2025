@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "Snowblock_default (Java)")
-public class SnowblockDefault extends LinearOpMode {
+@TeleOp(name = "Snowblock_right_drive (Java)")
+public class SnowblockRightDrive extends LinearOpMode {
   // DriveTrain
   private DcMotor leftMotor;
   private DcMotor rightMotor;
