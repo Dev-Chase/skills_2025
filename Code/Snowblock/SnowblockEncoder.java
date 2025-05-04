@@ -41,7 +41,7 @@ public class SnowblockEncoder extends LinearOpMode {
   private static final double ARM_LENGTH = 205; // mm
   private static final double ARM_BOTTOM_OFFSET = 114.5;
   private static final double ARM_TOP_VEL = (100 / 60) * TICKS_PER_REV; // 100 RPM -> Ticks Per Second
-  private static final double ARM_SPEED = 0.4;
+  private static final double ARM_SPEED = 0.25;
 
   private double armAngleToPos(double deg) {
     return -((deg - START_ANGLE) * TICKS_PER_DEGREE);
@@ -64,8 +64,8 @@ public class SnowblockEncoder extends LinearOpMode {
   private static final double ARM_HEIGHT_INTERVAL = 2.5 * 25.4; // inches -> mm
   private static final double ARM_DEG_INTERVAL = Math.toDegrees(Math.asin(ARM_HEIGHT_INTERVAL/ARM_LENGTH));
   private static final int ARM_TICK_INTERVAL = (int)(ARM_DEG_INTERVAL * TICKS_PER_DEGREE);
-  private static final int ARM_MAX_POS = 960; // Closest to the ground
-  private static final int ARM_MIN_POS = -1400; // Closest to the ground
+  private static final int ARM_MAX_POS = 950; // Closest to the ground
+  private static final int ARM_MIN_POS = -1400;
   private static final int ARM_START_POS = (int)(ARM_MAX_POS - (int)((double)ARM_MAX_POS / ARM_TICK_INTERVAL) * ARM_TICK_INTERVAL);
 
   // Arm Position Tuning
@@ -85,8 +85,8 @@ public class SnowblockEncoder extends LinearOpMode {
   private static final double RIGHT_OPEN_POS = RIGHT_MAX_POS;
   private static final double LEFT_CLOSED_POS = LEFT_MAX_POS;
   private static final double RIGHT_CLOSED_POS = RIGHT_MIN_POS;
-  private static final double COEFFICIENT_3 = 0.35; // 35% closed
-  private static final double COEFFICIENT_6 = 0.7; // 70% closed
+  private static final double COEFFICIENT_3 = 0.90; // 90% closed
+  private static final double COEFFICIENT_6 = 0.45; // 45% closed
   private static final double LEFT_3_POS = LEFT_MIN_POS + COEFFICIENT_3 * (LEFT_MAX_POS - LEFT_MIN_POS);
   private static final double RIGHT_3_POS = RIGHT_MAX_POS - COEFFICIENT_3 * (RIGHT_MAX_POS - RIGHT_MIN_POS);
   private static final double LEFT_6_POS = LEFT_MIN_POS + COEFFICIENT_6 * (LEFT_MAX_POS - LEFT_MIN_POS);
@@ -168,25 +168,11 @@ public class SnowblockEncoder extends LinearOpMode {
     armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     arm_target_pos = ARM_START_POS;
 
-    //TODO: remove
-    while (!opModeIsActive()) {
-      telemetry.addData("Arm Height", getArmHeight());
-      telemetry.addData("Arm Position", armMotor.getCurrentPosition());
-      telemetry.addData("Arm Angle", getArmAngle());
-      telemetry.addData("Arm Target Position", arm_target_pos);
-      telemetry.addData("Arm Deg Interval", ARM_DEG_INTERVAL);
-      telemetry.addData("Ticks per degree", TICKS_PER_DEGREE);
-      telemetry.addData("Arm Tick Interval", ARM_TICK_INTERVAL);
-      telemetry.update();
-    }
-
     waitForStart();
     claw_timer = new ElapsedTime();
     arm_timer = new ElapsedTime();
     setArmPos();
-    setClawPos(ClawPosition.CLOSED);
-    right_claw_pos = RIGHT_MAX_POS;
-    left_claw_pos = LEFT_MIN_POS;
+    setClawPos(ClawPosition.CLOSE);
     if (opModeIsActive()) {
       while (opModeIsActive()) {
         // Input Updating
@@ -213,12 +199,15 @@ public class SnowblockEncoder extends LinearOpMode {
         }
 
         // Resetting Arm Position
-        if (gamepad1.y) {
+        if (gamepad1.dpad_left) {
           arm_target_pos = 0;
           setArmPos();
-        } else if (gamepad1.a) {
+        } else if (gamepad1.dpad_right) {
           arm_target_pos = ARM_MAX_POS;
-            setArmPos();
+          setArmPos();
+        } else if (gamepad1.left_stick_button) {
+          arm_target_pos = 0;
+          setArmPos();
         }
 
         // Arm Tuning
@@ -235,6 +224,15 @@ public class SnowblockEncoder extends LinearOpMode {
         }
         
         // Claw Autopositioning
+        if (gamepad1.triangle) {
+          setClawPos(ClawPosition.OPEN);
+        } else if (gamepad1.cross) {
+          setClawPos(ClawPosition.CLOSE);
+        } else if (gamepad1.circle) {
+          setClawPos(ClawPosition.SEP_3);
+        } else if (gamepad1.square) {
+          setClawPos(ClawPosition.SEP_6);
+        }
 
         // Claw Tuning
         if (claw_timer.milliseconds() > CLAW_TUNE_DELAY) {
@@ -252,7 +250,7 @@ public class SnowblockEncoder extends LinearOpMode {
         // Setting Claw Position
         leftClawServo.setPosition(left_claw_pos);
         rightClawServo.setPosition(right_claw_pos);
-
+        
         // Telemetry
         telemetry.addData("Testing Button", gamepad1.x);
         telemetry.addData("Arm Height", getArmHeight());
